@@ -38,12 +38,17 @@
 
             usernames.sort();
             emails.sort();
+            let usernameStr = "";
             usernames.forEach (username => {
-                $('#msdownloads').append(username + " S\n")
+                usernameStr = usernameStr + username + " S\n"
             })
+            $("#msdownloads").val(usernameStr);
+
+            let emailStr = "";
             emails.forEach (email => {
-                $('#emails').append(email + "\n")
+                emailStr = emailStr + email + "\n"                
             })
+            $('#emails').val(emailStr)
         } catch(e) {
             $("#errmsg").text("Problem parsing data: " + e)
         }
