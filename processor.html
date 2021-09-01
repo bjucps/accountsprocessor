@@ -14,6 +14,8 @@
     
       function parse() {
         $("#errmsg").text("")
+        $("#msdownloads").val("")
+        $("#emails").val("")
         const input = $('#input').val();
         try {
             const data = $.csv.toArrays(input, {
