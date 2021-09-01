@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Process Enrollment Data</title>
+
+    <script src="http://code.jquery.com/jquery-3.3.1.slim.js" integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA=" crossorigin="anonymous"></script>
+    <script src="http://evanplaice.github.io/jquery-csv/src/jquery.csv.js"></script>
+    <script>
+
+      $(document).ready(() => {
+        $('#run').click(parse);
+      });
+
+    
+      function parse() {
+        $("#errmsg").text("")
+        const input = $('#input').val();
+        try {
+            const data = $.csv.toArrays(input, {
+                separator: "\t"
+            });
+            var usernames = [];
+            var emails = [];
+            data.forEach( item => {
+                if (item[0] == "CPS") {
+                    username = item[2].toLowerCase();
+                    email = item[3];
+                    if (!usernames.includes(username)) {
+                        usernames.push(username)
+                    }
+                    if (!emails.includes(email)) {
+                        emails.push(email)
+                    }
+                }
+            });
+
+            usernames.sort();
+            emails.sort();
+            usernames.forEach (username => {
+                $('#msdownloads').append(username + " S\n")
+            })
+            emails.forEach (email => {
+                $('#emails').append(email + "\n")
+            })
+        } catch(e) {
+            $("#errmsg").text("Problem parsing data: " + e)
+        }
+        
+      }
+    </script>
+
+</head>
+
+  <body>
+    <h1>Student Account Processor</h1>
+
+    <p>Instructions: Replace the data in the text box below with a tab-delimited list of enrollment data containing 
+        course prefix, number, username, and email address. Then, click Parse to generate a list of email addresses and
+        user import data for the software downloads system.
+    </p>
+    <textarea id="input" rows="4" cols="60">CPS	110	WAGUI653	wagui653@students.bju.edu
+CPS	191	WAGUI653	wagui653@students.bju.edu
+CPS	110	RALBE495	ralbe495@students.bju.edu
+CPS	191	RALBE495	ralbe495@students.bju.edu
+</textarea>
+    <br>
+    <input type="button" id="run" value="Parse"> 
+    <div id="errmsg"></div>
+    
+    <h3>Student Email Addresses</h3>
+    <textarea id="emails" rows="4" cols="30"></textarea>
+    <h3>Software Downloads User Import List</h3>
+    <textarea id="msdownloads" rows="4" cols="30"></textarea>
+
+  </body>
+</html>
